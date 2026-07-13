@@ -1,4 +1,4 @@
-import ErrorText from "./error-text";
+import ErrorText from "../../../features/auth/components/error-text";
 
 interface FormInputProps {
   label: string;

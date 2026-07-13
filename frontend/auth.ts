@@ -4,6 +4,8 @@ import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  secret: process.env.AUTH_SECRET,
+
   providers: [
     GitHub({
       clientId: process.env.AUTH_GITHUB_ID!,
@@ -65,6 +67,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
 
+  session: {
+    strategy: "jwt",
+  },
+
   // TODO: Callbacks
-  callbacks: {},
+  callbacks: {
+    async signIn({ user, account, profile }) {
+      if (account?.provider === "github" || account?.provider === "google") {
+        const payload = {
+          provider: account.provider,
+          provider_account_id: account.providerAccountId,
+          email: user.email,
+          first_name: profile?.given_name ?? user.name?.split(" ")[0] ?? "",
+          last_name: profile?.family_name ?? user.name?.split(" ")[1] ?? "",
+          provider_access_token: account.access_token,
+        };
+
+        // TODO: replace with real fetch to FastAPI /auth/oauth once it's built
+        console.log(
+          `[signIn:${account.provider}] payload for FastAPI:`,
+          payload,
+        );
+      }
+
+      return true;
+    },
+  },
 });

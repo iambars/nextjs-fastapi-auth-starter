@@ -1,6 +1,6 @@
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { signInWithGoogle, signInWithGithub } from "@/app/actions/auth";
+import { signInWithGoogle, signInWithGithub } from "@/features/auth/actions";
 
 export default function OAuthButtons() {
   return (

@@ -1,18 +1,13 @@
 "use server";
 
 import { z } from "zod";
-import { RegisterErrors, registerSchema } from "@/lib/validations/register";
-
-export type RegisterState = {
-  success: boolean;
-  redirect: string | null;
-  errors: RegisterErrors;
-};
+import { AuthState } from "@/features/auth/types";
+import { registerSchema } from "@/features/auth/validations/register";
 
 export async function register(
-  _prevState: RegisterState,
+  _prevState: AuthState,
   formData: FormData,
-): Promise<RegisterState> {
+): Promise<AuthState> {
   const API_URL = process.env.FASTAPI_URL;
   const parsed = registerSchema.safeParse({
     firstName: formData.get("firstName"),

@@ -2,19 +2,15 @@
 
 import { z } from "zod";
 import { signIn } from "@/auth";
-import { LoginErrors, loginSchema } from "@/lib/validations/login";
+import { loginSchema } from "@/features/auth/validations/login";
 import { AuthError } from "next-auth";
 
-export type LoginState = {
-  success: boolean;
-  redirect: string | null;
-  errors: LoginErrors;
-};
+import { AuthState } from "@/features/auth/types";
 
 export async function authenticate(
-  _prevState: LoginState,
+  _prevState: AuthState,
   formData: FormData,
-): Promise<LoginState> {
+): Promise<AuthState> {
   const parsed = loginSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
